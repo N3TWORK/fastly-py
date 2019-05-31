@@ -104,6 +104,10 @@ class Version(Model):
         resp, data = self._query('GET', '/backend/check_all')
         return data
 
+    def get_backends(self):
+        resp, data = self._query('GET', '/backend')
+        return data
+
     def activate(self):
         resp, data = self._query('PUT', '/activate')
         return data
