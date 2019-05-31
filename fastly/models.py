@@ -132,8 +132,8 @@ class Version(Model):
         resp, data = self._query('GET', '/generated_vcl')
         return data
 
-    def vcl(self, name, content):
-        """ Create a new VCL under this version. """
+    def get_vcl_for_update(self, name, content):
+        """ Create a new VCL instance """
         vcl = VCL()
         vcl.conn = self.conn
 
@@ -147,6 +147,11 @@ class Version(Model):
             'content': content,
         }
 
+        return vcl
+
+    def vcl(self, name, content):
+        """ Create a new VCL under this version. """
+        vcl = self.get_vcl_for_update(name, content)
         vcl.save()
 
         return vcl
@@ -205,4 +210,9 @@ class VCL(Model):
 
     def main(self):
         resp, data = self._query('PUT', '/main')
+        return data
+
+    def update_vcl(self):
+        params_str = urlencode({ 'content': self.attrs['content'] })
+        resp, data = self._query('PUT', body=params_str)
         return data
