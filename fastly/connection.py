@@ -42,8 +42,6 @@ class Connection(object):
         if self.authenticator:
             self.authenticator.add_auth(headers)
 
-        print "Sending request: %s %s" % (method, self.root + path)
-
         self.http_conn.request(method, self.root + path, body, headers=headers)
         response = self.http_conn.getresponse()
         body = response.read()
